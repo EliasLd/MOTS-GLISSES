@@ -90,5 +90,45 @@ namespace MOTS_GLISSES
 
             return i + 1;
         }
+
+        public void InitMatLettres()
+        {
+            int k = 97;
+            for (int i = 0; i < nombreMotParLettre.GetLength(0); i++)
+            {
+                nombreMotParLettre[i, 0] = k;
+                k = (char)(k + 1);
+            }
+            for(int j = 0; j < nombreMotParLettre.GetLength(0); j++ ) 
+            {
+                nombreMotParLettre[j, 1] = 1;     //on initialise à 1 pour éviter lors du parcours avec des variables itératives d'oublier une lettre
+            }
+        }
+
+        public void CompteMotParLettre()
+        {
+            for(int i = 0; i<dictionnaire.Length; i++)
+            {
+                string mot = dictionnaire[i].ToLower();
+                for(int j = 0; j < nombreMotParLettre.GetLength(0); j++)
+                {
+                    if (mot[0] == (char)nombreMotParLettre[j, 0])
+                    {
+                        nombreMotParLettre[j, 1]++;
+                    }
+
+                }
+            }
+        }
+
+        public string toString()
+        {
+            string str =  ("Il y a " + dictionnaire.Length + " mots dans notre dictionnaire "+ this.langue);
+            for(int i = 0; i < nombreMotParLettre.GetLength(0); i++)
+            {
+                str += ("\n" + "Il y a " + nombreMotParLettre[i, 1] + " mots commencant par la lettre  " + (char)nombreMotParLettre[i, 0]);
+            }
+            return str;
+        }
     }
 }
