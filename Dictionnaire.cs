@@ -53,13 +53,13 @@ namespace MOTS_GLISSES
         /// <param name="tab">Dans notre cas, il s'agit du dicionnaire que l'on doit trier </param>
         /// <param name="debut">littéralement le début du tableau, càd l'index de départ du tableau -> 0 (dans notre cas évidemment) </param>
         /// <param name="fin">par analogie à "début", il s'agit du dernier indice du tableau dans notre cas car c'est tout le tableau que l'on souahite trier</param>
-        public void TriRapide(string[] tab, int debut, int fin)
+        public void Tri_Rapide(string[] tab, int debut, int fin)
         {
             if (debut < fin)   //Condition d'arrêt
             {
                 int index_pivot = FairePartition(tab, debut, fin);
-                TriRapide(tab, debut, index_pivot - 1);
-                TriRapide(tab, index_pivot + 1, fin);
+                Tri_Rapide(tab, debut, index_pivot - 1);
+                Tri_Rapide(tab, index_pivot + 1, fin);
             }
         }
 
@@ -119,6 +119,21 @@ namespace MOTS_GLISSES
 
                 }
             }
+        }
+
+        public bool RechDichoRecursif(string mot, int debut, int fin) 
+        {
+            if(debut <= fin)
+            {
+                int milieu = (debut + fin) / 2;
+                if (dictionnaire[milieu] == mot.ToUpper())
+                    return true;
+                else if (string.Compare(dictionnaire[milieu], mot) > 0)
+                    return RechDichoRecursif(mot, debut, milieu - 1);
+                else
+                    return RechDichoRecursif(mot, milieu + 1, fin);
+            }
+            return false;
         }
 
         public string toString()
