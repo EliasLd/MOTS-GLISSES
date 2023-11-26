@@ -11,12 +11,14 @@ namespace MOTS_GLISSES
         private char symbole;
         private int nombreApparitions;
         private int poids;
+        private int nombreApparitionsActuel;
 
-        public Lettre(char symbole, int nombreApparitions, int poids)
+        public Lettre(char symbole, int nombreApparitions, int poids, int nombreApparitionsActuel)
         {
             this.symbole = symbole;
             this.nombreApparitions = nombreApparitions;
             this.poids = poids;
+            this.nombreApparitionsActuel = nombreApparitionsActuel;
         }   
 
         public char Symbole
@@ -34,9 +36,15 @@ namespace MOTS_GLISSES
             get { return poids; }
         }
 
+        public int NombreApparitionsActuel
+        {
+            get { return nombreApparitionsActuel; }
+            set { nombreApparitionsActuel++;}
+        }
+
         public string toString()
         {
-            return ("la lettre " + this.symbole + " apparait au maximum " + this.nombreApparitions + " fois et a un poids de " + this.poids);
+            return ("la lettre " + this.symbole + " apparait au maximum " + this.nombreApparitions + " fois, a un poids de " + this.poids + " et est apparue " + this.nombreApparitionsActuel + " fois");
         }
 
     }

@@ -29,7 +29,7 @@ namespace MOTS_GLISSES
                     string ligne = sr.ReadLine();
                     string[] info = ligne.Split(",");
 
-                    tableauLettres[i] = new Lettre(char.Parse(info[0]), int.Parse(info[1]), int.Parse(info[2]));
+                    tableauLettres[i] = new Lettre(char.ToLower(char.Parse(info[0])), int.Parse(info[1]), int.Parse(info[2]), 0);
                     i++;
                 }
             }
@@ -40,12 +40,47 @@ namespace MOTS_GLISSES
             sr.Close();
         }
 
+        public void RemplirPlateauDeJeu()
+        {
+            Random aleatoire = new Random();
+            for(int i = 0; i < plateauJeu.GetLength(0); i++)
+            {
+                for(int j = 0; j < plateauJeu.GetLength(1);)
+                {
+                    int nombreAleatoire;
+                    do
+                    {
+                      nombreAleatoire = aleatoire.Next(0, 26);
+                    } while (tableauLettres[nombreAleatoire].NombreApparitionsActuel >= tableauLettres[nombreAleatoire].NombreApparitions);
+
+                    plateauJeu[i, j] = tableauLettres[nombreAleatoire];
+                    tableauLettres[nombreAleatoire].NombreApparitionsActuel++;
+                    j++;
+                }
+            }
+
+        }
+
         public void afficherLettres()
         {
             for(int i = 0; i < tableauLettres.Length; i++)
             {
                 Console.WriteLine(tableauLettres[i].toString());
             }
+        }
+
+        public string toString()
+        {
+            string str = null;
+            for (int i = 0; i < plateauJeu.GetLength(0); i++)
+            {
+                for (int j = 0; j < plateauJeu.GetLength(1); j++)
+                {
+                    str += (plateauJeu[i, j].Symbole + " ");
+                }
+                str += "\n";
+            }
+            return str;
         }
     }
 }
