@@ -18,6 +18,10 @@
             Console.Write(dico.toString());
             Console.WriteLine("\n\n\n");
             Console.WriteLine(dico.RechDichoRecursif("camion", 0, dico.GetDictionnaire.Length - 1));
+
+            Plateau plateau = new Plateau();
+            plateau.RemplirTabLettresDepuisFichierLettre("Lettres.txt");
+            plateau.afficherLettres();
         }
     }
 }
