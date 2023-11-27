@@ -79,7 +79,13 @@ namespace MOTS_GLISSES
                     string[] lettres = contenu[i].Split(";");
                     for (int j = 0; j < colonnes; j++)
                     {
-                        plateauJeu[i, j] = new Lettre(Convert.ToChar(lettres[j]), 0, 0, 0);
+                        for(int k = 0; k < tableauLettres.Length; k++)
+                        {
+                            if (Convert.ToChar(lettres[j]) == tableauLettres[k].Symbole)
+                            {
+                                plateauJeu[i, j] = new Lettre(Convert.ToChar(lettres[j]), tableauLettres[k].NombreApparitions, tableauLettres[k].Poids, tableauLettres[k].NombreApparitionsActuel);
+                            }
+                        }
                     }
                 }
             }
