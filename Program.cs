@@ -21,10 +21,10 @@
             Console.WriteLine();
             Plateau plateau = new Plateau();
             plateau.RemplirTabLettresDepuisFichierLettre("Lettres.txt");
-            plateau.RemplirPlateauDeJeu();
+            plateau.ToRead("Test1.csv");
             Console.WriteLine(plateau.toString());
             Console.WriteLine();
-            plateau.afficherLettres();
+            //plateau.afficherLettres();
         }
     }
 }
