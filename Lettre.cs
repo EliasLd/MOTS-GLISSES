@@ -12,6 +12,7 @@ namespace MOTS_GLISSES
         private int nombreApparitions;
         private int poids;
         private int nombreApparitionsActuel;
+        private bool found = false;
 
         public Lettre(char symbole, int nombreApparitions, int poids, int nombreApparitionsActuel)
         {
@@ -34,6 +35,12 @@ namespace MOTS_GLISSES
         public int Poids
         {
             get { return poids; }
+        }
+
+        public bool Found
+        {
+            get { return found; }
+            set { found = value; }
         }
 
         public int NombreApparitionsActuel

@@ -119,5 +119,56 @@ namespace MOTS_GLISSES
             }
             return str;
         }
+
+        public int nombreApparitionsLettreSurPremiereLignePlateau(char c)
+        {
+            int cpt = 0;
+            for(int j = 0; j < plateauJeu.GetLength(1); j++)
+            {
+                if(c == plateauJeu[plateauJeu.GetLength(0) - 1, j].Symbole)
+                    cpt++;
+            }
+            return cpt;
+        }
+
+        public bool Recherche_mot(string mot, int n, int index = 0, bool premiereLettreSurLaBase = false, int i = 0, int j = 0)
+        {
+            if(!premiereLettreSurLaBase)
+            {
+                i = plateauJeu.GetLength(0) - 1;
+                if (mot[index] == plateauJeu[i, j].Symbole && !plateauJeu[i, j].Found)   //il faudra penser à mettre le mot de l'utilisateur en minuscule avant
+                {
+                    plateauJeu[i, j].Found = true;
+                    return Recherche_mot(mot, n, index + 1, true, i, j);
+                }
+                else if (j == plateauJeu.GetLength(1) - 1)
+                {
+                    return false;
+                }
+                else
+                {
+                    return Recherche_mot(mot, n, index, false, i, j + 1);
+                }
+            }
+            else
+            {
+                if (index == mot.Length)
+                    return true;
+                if (i != 0 && mot[index] == plateauJeu[i - 1, j].Symbole)     //Recherche verticale
+                    return Recherche_mot(mot, n, index + 1, true, i - 1, j);
+                else if (j != plateauJeu.GetLength(1) - 1 && mot[index] == plateauJeu[i, j + 1].Symbole)    //Recherche horizontale (droite)
+                    return Recherche_mot(mot, n, index + 1, true, i, j + 1);
+                else if (j != 0 && mot[index] == plateauJeu[i, j - 1].Symbole)     //Recherche horizontale (gauche)
+                    return Recherche_mot(mot, n, index + 1, true, i, j - 1);
+                else if (i != 0 && j != 0 && mot[index] == plateauJeu[i - 1, j - 1].Symbole)     //Recherche diagonale (gauche)
+                    return Recherche_mot(mot, n, index + 1, true, i - 1, j - 1);
+                else if (i != 0 && j != plateauJeu.GetLength(1) - 1 && mot[index] == plateauJeu[i - 1, j + 1].Symbole)   //Recherche diagonale (droite)
+                    return Recherche_mot(mot, n, index + 1, true, i - 1, j + 1 );
+                else if (n > 1)
+                    return Recherche_mot(mot, n - 1, 0, false, 0, 0);
+                else
+                    return false;
+            }
+        }
     }
 }
