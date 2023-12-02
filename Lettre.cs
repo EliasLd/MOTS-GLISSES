@@ -13,6 +13,7 @@ namespace MOTS_GLISSES
         private int poids;
         private int nombreApparitionsActuel;
         private bool found = false;
+        private bool crush = false;
 
         public Lettre(char symbole, int nombreApparitions, int poids, int nombreApparitionsActuel)
         {
@@ -25,6 +26,7 @@ namespace MOTS_GLISSES
         public char Symbole
         {
             get { return symbole;}
+            set { symbole = value; }
         }
 
         public int NombreApparitions
@@ -41,6 +43,12 @@ namespace MOTS_GLISSES
         {
             get { return found; }
             set { found = value; }
+        }
+
+        public bool Crush
+        {
+            get { return crush; }
+            set { crush = value; }
         }
 
         public int NombreApparitionsActuel

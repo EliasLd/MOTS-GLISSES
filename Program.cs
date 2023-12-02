@@ -34,6 +34,9 @@
             {
                 Console.WriteLine("Raté");  
             }
+            Console.WriteLine();
+            Console.WriteLine(plateau.toString());
+
             //plateau.afficherLettres();
         }
     }
