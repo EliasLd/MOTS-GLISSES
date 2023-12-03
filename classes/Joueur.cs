@@ -21,6 +21,7 @@ namespace MOTS_GLISSES
         public string Nom
         {
             get { return nom; }
+            set { nom = value; }    
         }
         public int Score
         {

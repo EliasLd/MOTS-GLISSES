@@ -4,8 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MOTS_GLISSES.classes
-{
+namespace MOTS_GLISSES { 
     public class Jeu
     {
         private Dictionnaire dico;
