@@ -37,6 +37,18 @@
             Console.WriteLine();
             Console.WriteLine(plateau.toString());
 
+            choix = Console.ReadLine();
+            if (plateau.Recherche_mot(choix, plateau.nombreApparitionsLettreSurPremiereLignePlateau(choix[0])))
+            {
+                Console.WriteLine("Bravo, " + choix + " est dans le plateau");
+            }
+            else
+            {
+                Console.WriteLine("Raté");
+            }
+            Console.WriteLine();
+            Console.WriteLine(plateau.toString());
+
             //plateau.afficherLettres();
         }
     }

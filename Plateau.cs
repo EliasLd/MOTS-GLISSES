@@ -11,8 +11,10 @@ namespace MOTS_GLISSES
     {
         private static Lettre[] tableauLettres = new Lettre[26];
         private static Lettre[,] plateauJeu;
+        int[,] indexCrush;
 
-        
+
+
 
         public Lettre[,] PlateauJeu
         {
@@ -139,7 +141,9 @@ namespace MOTS_GLISSES
                 if (mot[index] == plateauJeu[i, j].Symbole && !plateauJeu[i, j].Found)   //il faudra penser à mettre le mot de l'utilisateur en minuscule avant
                 {
                     plateauJeu[i, j].Found = true;
-                    plateauJeu[i, j].Crush = true;
+                    indexCrush = new int[mot.Length + 1, 2];
+                    indexCrush[index, 0] = i;
+                    indexCrush[index, 1] = j;
                     return Recherche_mot(mot, n, index + 1, true, i, j);
                 }
                 else if (j == plateauJeu.GetLength(1) - 1)
@@ -153,35 +157,42 @@ namespace MOTS_GLISSES
             }
             else
             {
-                if (index == mot.Length)
+                if (index == mot.Length)     //condition d'arrêt
                 {
-                    plateauJeu[i, j].Crush = true;
+                    indexCrush[index, 0] = i;
+                    indexCrush[index, 1] = j;
+                    StateIndicesCrush();              //ce n'est qu'à ce moment là que l'on valide que les lettres vont être crush pour faire tomber les autres
                     Maj_Plateau();
                     return true;
                 }
                 if (i != 0 && mot[index] == plateauJeu[i - 1, j].Symbole)     //Recherche verticale
                 {
-                    plateauJeu[i, j].Crush = true;
+                    indexCrush[index, 0] = i;
+                    indexCrush[index, 1] = j;                
                     return Recherche_mot(mot, n, index + 1, true, i - 1, j);
                 }
                 else if (j != plateauJeu.GetLength(1) - 1 && mot[index] == plateauJeu[i, j + 1].Symbole)    //Recherche horizontale (droite)
                 {
-                    plateauJeu[i, j].Crush = true;
+                    indexCrush[index, 0] = i;
+                    indexCrush[index, 1] = j;
                     return Recherche_mot(mot, n, index + 1, true, i, j + 1);    
                 }
                 else if (j != 0 && mot[index] == plateauJeu[i, j - 1].Symbole)     //Recherche horizontale (gauche)
                 {
-                    plateauJeu[i, j].Crush = true;
+                    indexCrush[index, 0] = i;
+                    indexCrush[index, 1] = j;
                     return Recherche_mot(mot, n, index + 1, true, i, j - 1);
                 }
                 else if (i != 0 && j != 0 && mot[index] == plateauJeu[i - 1, j - 1].Symbole)     //Recherche diagonale (gauche)
                 {
-                    plateauJeu[i, j].Crush = true;
+                    indexCrush[index, 0] = i;
+                    indexCrush[index, 1] = j;
                     return Recherche_mot(mot, n, index + 1, true, i - 1, j - 1);
                 }
                 else if (i != 0 && j != plateauJeu.GetLength(1) - 1 && mot[index] == plateauJeu[i - 1, j + 1].Symbole)   //Recherche diagonale (droite)
                 {
-                    plateauJeu[i, j].Crush = true;
+                    indexCrush[index, 0] = i;
+                    indexCrush[index, 1] = j;
                     return Recherche_mot(mot, n, index + 1, true, i - 1, j + 1);
                 }
                 else if (n > 1)
@@ -191,11 +202,28 @@ namespace MOTS_GLISSES
             }
         }
 
+        void StateIndicesCrush()
+        {
+           
+               for (int i = 0; i < plateauJeu.GetLength(0); i++)
+               {
+                   for (int j = 0; j < plateauJeu.GetLength(1); j++)
+                   {
+                      for (int k = 0; k < indexCrush.GetLength(0); k++)
+                      {
+                        if (indexCrush[k, 0] == i && indexCrush[k, 1] == j)
+                            plateauJeu[i, j].Crush = true;
+                      }
+                   }
+               }
+        }
+
+
         public void Maj_Plateau()
         {
-            for(int i = 0; i < plateauJeu.GetLength(0); i++)
+            for (int i = 0; i < plateauJeu.GetLength(0); i++)
             {
-                for(int j = 0; j <  plateauJeu.GetLength(1); j++)
+                for (int j = 0; j < plateauJeu.GetLength(1); j++)
                 {
                     if (plateauJeu[i, j].Crush)
                     {
