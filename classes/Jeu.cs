@@ -9,12 +9,13 @@ namespace MOTS_GLISSES {
     {
         private Dictionnaire dico;
         private Plateau plateauCourant;
-        private static Joueur[] joueurs = new Joueur[2];   //static car il n'y a que deux joueurs par définition dans la consigne mais on n'aurait pu en mettre plus
+        private Joueur[] joueurs = new Joueur[2];   // il n'y a que deux joueurs par définition dans la consigne mais on n'aurait pu en mettre plus
 
-        public Jeu(Dictionnaire dico, Plateau plateauCourant)
+        public Jeu(Dictionnaire dico, Plateau plateauCourant, Joueur[] tab)
         {
             this.dico = dico;
             this.plateauCourant = plateauCourant;
+            this.joueurs = tab;
         }   
 
         public Dictionnaire Dico

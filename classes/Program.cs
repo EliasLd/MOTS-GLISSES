@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Text;
 using System.IO;
+using System.Diagnostics.SymbolStore;
 
 namespace MOTS_GLISSES
 {
@@ -27,51 +28,89 @@ namespace MOTS_GLISSES
             joueurs[0] = new Joueur(setNom(1, 5, 6));
             joueurs[1] = new Joueur(setNom(2, 5, 13));
 
-            /*
-            Dictionnaire dico = new Dictionnaire("francais");
-            dico.RemplirDico("Mots_Français.txt");
-            //Console.WriteLine(dico.GetDictionnaire.Length);                                // Test pour connaître la taille du dico, on fera des tests unitaires plus tard
-            dico.Tri_Rapide(dico.GetDictionnaire, 0, dico.GetDictionnaire.Length - 1);     //On envoie l'indice - 1 pour éviter une tentative d'accès à un indice inexistant
+            Jeu game;
 
-
-            dico.InitMatLettres();
-            dico.CompteMotParLettre();
-            /*Console.Write(dico.toString());
-            Console.WriteLine("\n\n\n");
-            Console.WriteLine(dico.RechDichoRecursif("camion", 0, dico.GetDictionnaire.Length - 1));
-            Console.WriteLine();
-            Plateau plateau = new Plateau();
-            plateau.RemplirTabLettresDepuisFichierLettre("Lettres.txt");
-            plateau.ToRead("Test1.csv");
-            Console.WriteLine(plateau.toString());
-            Console.WriteLine();
+            bool fin = false;
             string choix = null;
-            choix = Console.ReadLine();
-            if (plateau.Recherche_mot(choix, plateau.nombreApparitionsLettreSurPremiereLignePlateau(choix[0])))
-            {
-                Console.WriteLine("Bravo, " +  choix + " est dans le plateau");
-            }
-            else
-            {
-                Console.WriteLine("Raté");  
-            }
-            Console.WriteLine();
-            Console.WriteLine(plateau.toString());
 
-            choix = Console.ReadLine();
-            if (plateau.Recherche_mot(choix, plateau.nombreApparitionsLettreSurPremiereLignePlateau(choix[0])))
-            {
-                Console.WriteLine("Bravo, " + choix + " est dans le plateau");
-            }
-            else
-            {
-                Console.WriteLine("Raté");
-            }
-            Console.WriteLine();
-            Console.WriteLine(plateau.toString());
+            Console.SetCursorPosition(5, 21);
 
-            //plateau.afficherLettres();
-            */
+            do
+            {
+                Console.WriteLine("Tapez le nom du mode de jeu : 'fichier' ; 'aléatoire' ou tapez 'Sortir' pour quitter");
+                while (choix != "fichier" && choix != "aléatoire" && choix != "sortir")
+                {
+                    Console.SetCursorPosition(5, 23);
+                    choix = Console.ReadLine().Trim();
+                }
+
+                switch (choix)
+                {
+                    case "fichier":
+
+                        string nomFile = " ";
+                        Console.Clear();
+                        Console.SetCursorPosition(5, 5);
+                        Console.WriteLine("Entrez le nom du fichier : ");
+                        Console.SetCursorPosition(35, 5);
+                        nomFile = Console.ReadLine();
+                        while (!IsInDirectory(nomFile))
+                        {
+                            Console.SetCursorPosition(35, 7);
+                            Console.ForegroundColor = ConsoleColor.Red;
+                            Console.Write("Introuvable");
+                            Console.ResetColor();
+                            Console.SetCursorPosition(35, 5);
+                            nomFile = Console.ReadLine();
+                        }
+
+                        plateau.ToRead(nomFile);
+                        game = new Jeu(dico, plateau, joueurs);
+                        
+
+                        bool win = false;
+                        int i = 0;
+                        string mot = null;
+
+                        while (!win)
+                        {
+                            Console.Clear();
+                            Console.WriteLine(plateau.toString());
+                            Console.WriteLine("entrez un mot " + game.Joueurs[i].Nom);
+
+                            do
+                            {
+                                mot = Console.ReadLine().Trim();
+                            } while (string.IsNullOrEmpty(mot) || !game.Dico.RechDichoRecursif(mot, 0, game.Dico.GetDictionnaire.Length - 1));
+
+                            if(game.PlateauCourant.Recherche_mot(mot, game.PlateauCourant.nombreApparitionsLettreSurPremiereLignePlateau(mot[0])))
+                            {
+                                Console.WriteLine("Bravo " + game.Joueurs[i].Nom + ", le mot " + mot + " était dans le plateau");
+                                game.Joueurs[i].Add_Mot(mot);
+                                game.Joueurs[i].Add_Score(1);
+                            }
+
+                            i++;
+                            if (i == 2)
+                                i = 0;
+                        }
+
+                        break;
+                    case "aléatoire":
+
+                        plateau.RemplirPlateauDeJeu8par8();
+                        game = new Jeu(dico, plateau, joueurs);
+
+                        break;
+                    case "sortir":
+
+                        fin = true;
+
+                        break;
+                    default: break;
+                }
+                choix = null;
+            } while (!fin);
         }
 
         public static string setNom(int numJoueur, int posX, int posY)
@@ -95,6 +134,11 @@ namespace MOTS_GLISSES
             } while (string.IsNullOrEmpty(nom));
 
             return nom;
+        }
+
+        public static bool IsInDirectory(string nomFile) 
+        {
+            return File.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, nomFile));
         }
     }
 }

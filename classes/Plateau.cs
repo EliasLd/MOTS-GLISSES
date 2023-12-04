@@ -66,7 +66,7 @@ namespace MOTS_GLISSES
 
         }
 
-        public void ToRead(string nomfile)
+        public bool ToRead(string nomfile)
         { 
             int nombreLignes = 0;
             StreamReader sr = new StreamReader(nomfile);
@@ -94,8 +94,10 @@ namespace MOTS_GLISSES
             catch
             {
                 Console.WriteLine("Erreur de lecture du fichier");
+                return false;
             }
             finally { sr.Close(); }
+            return true;
             
 
         }
