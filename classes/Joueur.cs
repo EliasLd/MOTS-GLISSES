@@ -28,11 +28,13 @@ namespace MOTS_GLISSES
         public int Score
         {
             get { return score; }
+            set { score = value; }
         }
 
         public string MotTrouves
         {
             get { return motTrouves;}
+            set { motTrouves = value;}
         }
 
         public void Add_Mot(string mot)

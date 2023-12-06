@@ -71,9 +71,9 @@ namespace MOTS_GLISSES
         /// <returns></returns>
         public int FairePartition(string[] tab, int debut, int fin)
         {
-            string pivot = tab[fin];   // -1 Pour éviter une erreur d'indice
-            int i = debut -1;
-            for(int j = debut; j <= fin - 1; j++) 
+            string pivot = tab[fin];   
+            int i = debut -1;       // -1 Pour éviter une erreur d'indice
+            for (int j = debut; j <= fin - 1; j++) 
             {
                 if (string.Compare(tab[j], pivot) <= 0)
                 {

@@ -30,8 +30,6 @@ namespace MOTS_GLISSES
             joueurs[0] = new Joueur(setNom(1, 5, 6), " ", 0);
             joueurs[1] = new Joueur(setNom(2, 5, 13), " ", 0);
 
-            Jeu game;
-
             bool fin = false;
             string choix = null;
 
@@ -65,92 +63,18 @@ namespace MOTS_GLISSES
                             Console.SetCursorPosition(35, 5);
                             nomFile = Console.ReadLine();
                         }
-
+                        plateau = new Plateau();
+                        plateau.RemplirTabLettresDepuisFichierLettre("Lettres.txt");
                         plateau.ToRead(nomFile);
-                        game = new Jeu(dico, plateau, joueurs);
-
-                        DateTime startMenu = DateTime.Now;
-                        Console.Clear();
-                        while(DateTime.Now - startMenu < TimeSpan.FromSeconds(5))
-                        {
-                            Console.SetCursorPosition(5, 5);
-                            Console.Write("La partie va commencer dans ");
-                            Console.ForegroundColor= ConsoleColor.Yellow;
-                            TimeSpan tempsRestant = TimeSpan.FromSeconds(5) - (DateTime.Now - startMenu);
-                            Console.Write(tempsRestant);
-                            Console.ResetColor();
-                            Console.Write(" secondes ! ");
-                        }
-                        
-
-                        bool win = false;
-                        int i = 0;
-                        DateTime débutPartie = DateTime.Now;
-                        TimeSpan duréeGlobale = TimeSpan.FromSeconds(15);   //test pour une partie qui dure 15 secondes en tout
-
-                            while (!win && DateTime.Now - débutPartie < duréeGlobale)
-                            {
-                                Console.Clear();
-                                Console.SetCursorPosition(39, 3);
-                                Console.WriteLine(game.Joueurs[0].toString());
-                                Console.SetCursorPosition(39, 4);
-                                Console.WriteLine(game.Joueurs[1].toString());
-                                Console.SetCursorPosition(0, 0);
-                                Console.WriteLine(plateau.toString());
-                                Console.WriteLine("entrez un mot " + game.Joueurs[i].Nom);
-
-                                DateTime début = DateTime.Now;
-                                TimeSpan durée = TimeSpan.FromSeconds(5);           //test pour le tour d'un joueur qui dure 5 secondes
-
-                                string mot = null;
-
-
-
-                                while (DateTime.Now - début < durée)  //une minute en millisecondes
-                                {
-                                
-                                mot = Console.ReadLine().Trim();
-                                    
-
-                                    if (string.IsNullOrEmpty(mot))
-                                    {
-                                        Console.SetCursorPosition(39, 0);
-                                        Console.ForegroundColor = ConsoleColor.Red;
-                                        Console.Write("Invalide, Réessayez.");
-                                        Console.SetCursorPosition(0, 20);
-                                        Console.ResetColor();
-                                    }
-                                    else if (!game.Joueurs[i].Contient(mot) && mot.Length >= 2 && DateTime.Now - début < durée
-                                        && game.PlateauCourant.Recherche_mot(mot, game.PlateauCourant.nombreApparitionsLettreSurPremiereLignePlateau(mot[0]))
-                                        && game.Dico.RechDichoRecursif(mot, 0, game.Dico.GetDictionnaire.Length - 1))
-                                    {
-                                        game.Joueurs[i].Add_Mot(mot);
-                                        game.Joueurs[i].Add_Score(calculScore(mot, plateau));
-
-                                        Console.WriteLine("Bravo " + game.Joueurs[i].Nom + ", le mot " + mot + " était dans le plateau, appuie sur ENTREER pour continuer");
-                                        break;
-                                    }
-
-                                    System.Threading.Thread.Sleep(100);
-
-                                    if ((DateTime.Now - début) >= durée)    //pour éviter qu'un mot que le joueur ait écris et valider après son temps de jeu ne soit compté
-                                        break;
-
-                                }
-
-                                mot = null;
-
-                                i++;
-                                if (i == 2)
-                                    i = 0;
-                            }
-          
+                        Jeu gameFichier = new Jeu(dico, plateau, joueurs);
+                        gameFichier.Partie();
                         break;
                     case "aléatoire":
-
+                        Console.Clear();
+                        
                         plateau.RemplirPlateauDeJeu8par8();
-                        game = new Jeu(dico, plateau, joueurs);
-
+                        Jeu gameAléatoire = new Jeu(dico, plateau, joueurs);
+                        gameAléatoire.Partie();
                         break;
                     case "sortir":
 
@@ -159,7 +83,12 @@ namespace MOTS_GLISSES
                         break;
                     default: break;
                 }
+                joueurs[0].Score = 0;
+                joueurs[0].MotTrouves = " ";
+                joueurs[1].Score = 0;
+                joueurs[1].MotTrouves = " ";
                 choix = null;
+
             } while (!fin);
         }
 

@@ -9,9 +9,10 @@ namespace MOTS_GLISSES
 {
     public class Plateau
     {
-        private static Lettre[] tableauLettres = new Lettre[26];
+        private static Lettre[] tableauLettres;
         private static Lettre[,] plateauJeu;
-        int[,] indexCrush;
+        private int[,] indexCrush;
+        private static Random aleatoire = new Random();
 
 
 
@@ -30,6 +31,7 @@ namespace MOTS_GLISSES
         {
             int i = 0;
             StreamReader sr = new StreamReader(filename);
+            tableauLettres = new Lettre[26];
             try
             {
                 while (!sr.EndOfStream)
@@ -50,7 +52,14 @@ namespace MOTS_GLISSES
 
         public void RemplirPlateauDeJeu8par8()
         {
-            Random aleatoire = new Random();
+            for(int a = 0; a < tableauLettres.Length; a++)
+            {
+                tableauLettres[a].NombreApparitionsActuel = 0;
+            }
+            tableauLettres = new Lettre[26];
+
+            RemplirTabLettresDepuisFichierLettre("Lettres.txt");
+    
             plateauJeu = new Lettre[8, 8];
 
             for (int i = 0; i < 8; i++)
