@@ -10,7 +10,7 @@ namespace MOTS_GLISSES
     public class Joueur
     {
         private string nom;
-        private static string motTrouves = null;
+        private static string motTrouves = " ";
         private static int score = 0;
 
         public Joueur(string nom)

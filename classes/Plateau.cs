@@ -117,9 +117,21 @@ namespace MOTS_GLISSES
             {
                 for (int j = 0; j < plateauJeu.GetLength(1); j++)
                 {
-                    str += (plateauJeu[i, j].Symbole + " ");
+                    str += (plateauJeu[i, j].Symbole);
+                    if(j < plateauJeu.GetLength(1) - 1)
+                    {
+                        str += " | ";
+                    }
                 }
                 str += "\n";
+                for (int k = 0; k < plateauJeu.GetLength(0); k++)
+                {
+                    if(i < plateauJeu.GetLength(0) - 1)
+                        str += "----";
+                }
+                if(i < plateauJeu.GetLength(0) - 1)
+                    str += "--";
+                str+= "\n"; 
             }
             return str;
         }

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Text;
 using System.IO;
+using System.Diagnostics;
+using System.Threading;
 using System.Diagnostics.SymbolStore;
 
 namespace MOTS_GLISSES
@@ -70,30 +72,59 @@ namespace MOTS_GLISSES
 
                         bool win = false;
                         int i = 0;
-                        string mot = null;
+                        DateTime débutPartie = DateTime.Now;
+                        TimeSpan duréeGlobale = TimeSpan.FromSeconds(15);   //test pour une partie qui dure 15 secondes en tout
 
-                        while (!win)
-                        {
-                            Console.Clear();
-                            Console.WriteLine(plateau.toString());
-                            Console.WriteLine("entrez un mot " + game.Joueurs[i].Nom);
-
-                            do
+                            while (!win && DateTime.Now - débutPartie < duréeGlobale)
                             {
-                                mot = Console.ReadLine().Trim();
-                            } while (string.IsNullOrEmpty(mot) || !game.Dico.RechDichoRecursif(mot, 0, game.Dico.GetDictionnaire.Length - 1));
+                                Console.Clear();
+                                Console.WriteLine(plateau.toString());
+                                Console.WriteLine("entrez un mot " + game.Joueurs[i].Nom);
 
-                            if(game.PlateauCourant.Recherche_mot(mot, game.PlateauCourant.nombreApparitionsLettreSurPremiereLignePlateau(mot[0])))
-                            {
-                                Console.WriteLine("Bravo " + game.Joueurs[i].Nom + ", le mot " + mot + " était dans le plateau");
-                                game.Joueurs[i].Add_Mot(mot);
-                                game.Joueurs[i].Add_Score(1);
+                                DateTime début = DateTime.Now;
+                                TimeSpan durée = TimeSpan.FromSeconds(5);           //test pour le tour d'un joueur qui dure 5 secondes
+
+                                string mot = null;
+
+
+
+                                while (DateTime.Now - début < durée)  //une minute en millisecondes
+                                {
+                                    mot = Console.ReadLine().Trim();
+
+                                    if (string.IsNullOrEmpty(mot))
+                                    {
+                                        Console.SetCursorPosition(39, 0);
+                                        Console.ForegroundColor = ConsoleColor.Red;
+                                        Console.Write("Invalide, Réessayez.");
+                                        Console.SetCursorPosition(0, 20);
+                                        Console.ResetColor();
+                                    }
+                                    else if (!game.Joueurs[i].Contient(mot) && mot.Length >= 2 && DateTime.Now - début < durée
+                                        && game.PlateauCourant.Recherche_mot(mot, game.PlateauCourant.nombreApparitionsLettreSurPremiereLignePlateau(mot[0]))
+                                        && game.Dico.RechDichoRecursif(mot, 0, game.Dico.GetDictionnaire.Length - 1))
+                                    {
+                                        game.Joueurs[i].Add_Mot(mot);
+                                        game.Joueurs[i].Add_Score(1);
+
+                                        Console.WriteLine("Bravo " + game.Joueurs[i].Nom + ", le mot " + mot + " était dans le plateau, appuie sur ENTREER pour continuer");
+                                        break;
+                                    }
+
+                                    System.Threading.Thread.Sleep(100);
+
+                                    if ((DateTime.Now - début) >= durée)
+                                        break;
+
+                                }
+
+                                mot = null;
+
+                                i++;
+                                if (i == 2)
+                                    i = 0;
                             }
-
-                            i++;
-                            if (i == 2)
-                                i = 0;
-                        }
+                       
 
                         break;
                     case "aléatoire":
