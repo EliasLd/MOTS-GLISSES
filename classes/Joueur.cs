@@ -10,12 +10,14 @@ namespace MOTS_GLISSES
     public class Joueur
     {
         private string nom;
-        private static string motTrouves = " ";
-        private static int score = 0;
+        private string motTrouves;
+        private int score;
 
-        public Joueur(string nom)
+        public Joueur(string nom, string motTrouves, int score)
         {
             this.nom = nom;
+            this.motTrouves = motTrouves;
+            this.score = score;
         }
 
         public string Nom
@@ -35,22 +37,22 @@ namespace MOTS_GLISSES
 
         public void Add_Mot(string mot)
         {
-            motTrouves += mot + " ";
+            this.motTrouves += mot + " ";
         }
 
         public string toString()
         {
-            return (this.nom + " a un score de " + score + " et a trouvé les mots suivant : " + motTrouves);
+            return (this.nom + " a un score de " + this.score + " et a trouvé les mots suivant : " + this.motTrouves);
         }
 
         public void Add_Score(int val)
         {
-            score += val;
+            this.score += val;
         }
 
         public bool Contient(string mot)
         {
-            string[] tab_mots = motTrouves.Split(' ');
+            string[] tab_mots = this.motTrouves.Split(' ');
             for(int i = 0; i <  tab_mots.Length; i++) 
             {
                 if (tab_mots[i] == mot)

@@ -21,6 +21,11 @@ namespace MOTS_GLISSES
             get { return plateauJeu;}
         }
 
+        public Lettre[] TableauLettres
+        {
+            get { return tableauLettres; }
+        }
+
         public void RemplirTabLettresDepuisFichierLettre(string filename)
         {
             int i = 0;

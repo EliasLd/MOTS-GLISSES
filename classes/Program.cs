@@ -27,8 +27,8 @@ namespace MOTS_GLISSES
             Console.SetCursorPosition((Console.WindowWidth - messageBienvenu.Length) / 2 , 3);
             Console.WriteLine(messageBienvenu);
 
-            joueurs[0] = new Joueur(setNom(1, 5, 6));
-            joueurs[1] = new Joueur(setNom(2, 5, 13));
+            joueurs[0] = new Joueur(setNom(1, 5, 6), " ", 0);
+            joueurs[1] = new Joueur(setNom(2, 5, 13), " ", 0);
 
             Jeu game;
 
@@ -68,6 +68,19 @@ namespace MOTS_GLISSES
 
                         plateau.ToRead(nomFile);
                         game = new Jeu(dico, plateau, joueurs);
+
+                        DateTime startMenu = DateTime.Now;
+                        Console.Clear();
+                        while(DateTime.Now - startMenu < TimeSpan.FromSeconds(5))
+                        {
+                            Console.SetCursorPosition(5, 5);
+                            Console.Write("La partie va commencer dans ");
+                            Console.ForegroundColor= ConsoleColor.Yellow;
+                            TimeSpan tempsRestant = TimeSpan.FromSeconds(5) - (DateTime.Now - startMenu);
+                            Console.Write(tempsRestant);
+                            Console.ResetColor();
+                            Console.Write(" secondes ! ");
+                        }
                         
 
                         bool win = false;
@@ -78,6 +91,11 @@ namespace MOTS_GLISSES
                             while (!win && DateTime.Now - débutPartie < duréeGlobale)
                             {
                                 Console.Clear();
+                                Console.SetCursorPosition(39, 3);
+                                Console.WriteLine(game.Joueurs[0].toString());
+                                Console.SetCursorPosition(39, 4);
+                                Console.WriteLine(game.Joueurs[1].toString());
+                                Console.SetCursorPosition(0, 0);
                                 Console.WriteLine(plateau.toString());
                                 Console.WriteLine("entrez un mot " + game.Joueurs[i].Nom);
 
@@ -90,7 +108,9 @@ namespace MOTS_GLISSES
 
                                 while (DateTime.Now - début < durée)  //une minute en millisecondes
                                 {
-                                    mot = Console.ReadLine().Trim();
+                                
+                                mot = Console.ReadLine().Trim();
+                                    
 
                                     if (string.IsNullOrEmpty(mot))
                                     {
@@ -105,7 +125,7 @@ namespace MOTS_GLISSES
                                         && game.Dico.RechDichoRecursif(mot, 0, game.Dico.GetDictionnaire.Length - 1))
                                     {
                                         game.Joueurs[i].Add_Mot(mot);
-                                        game.Joueurs[i].Add_Score(1);
+                                        game.Joueurs[i].Add_Score(calculScore(mot, plateau));
 
                                         Console.WriteLine("Bravo " + game.Joueurs[i].Nom + ", le mot " + mot + " était dans le plateau, appuie sur ENTREER pour continuer");
                                         break;
@@ -113,7 +133,7 @@ namespace MOTS_GLISSES
 
                                     System.Threading.Thread.Sleep(100);
 
-                                    if ((DateTime.Now - début) >= durée)
+                                    if ((DateTime.Now - début) >= durée)    //pour éviter qu'un mot que le joueur ait écris et valider après son temps de jeu ne soit compté
                                         break;
 
                                 }
@@ -124,8 +144,7 @@ namespace MOTS_GLISSES
                                 if (i == 2)
                                     i = 0;
                             }
-                       
-
+          
                         break;
                     case "aléatoire":
 
@@ -170,6 +189,25 @@ namespace MOTS_GLISSES
         public static bool IsInDirectory(string nomFile) 
         {
             return File.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, nomFile));
+        }
+
+        public static int calculScore(string mot, Plateau plateau)
+        {
+            int score = 0;
+            int longueur = mot.Length;
+
+            for (int j = 0; j < mot.Length; j++)
+            {
+                for (int i = 0; i < plateau.TableauLettres.Length; i++)
+                {
+                    if (mot[j] == plateau.TableauLettres[i].Symbole)
+                    {
+                        score += plateau.TableauLettres[i].Poids;      //on ajoute le poids de la lettre correspondante
+                    }
+                }
+            }
+            score += longueur;
+            return score;
         }
     }
 }

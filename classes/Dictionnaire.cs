@@ -17,7 +17,6 @@ namespace MOTS_GLISSES
         {
             get { return dictionnaire; }
         }
-
         public Dictionnaire(string langue)
         {
             this.langue = langue;
