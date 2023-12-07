@@ -64,15 +64,16 @@ namespace MOTS_GLISSES
                             nomFile = Console.ReadLine();
                         }
                         plateau = new Plateau();
-                        plateau.RemplirTabLettresDepuisFichierLettre("Lettres.txt");
                         plateau.ToRead(nomFile);
                         Jeu gameFichier = new Jeu(dico, plateau, joueurs);
                         gameFichier.Partie();
                         break;
                     case "aléatoire":
                         Console.Clear();
-                        
-                        plateau.RemplirPlateauDeJeu8par8();
+                        plateau = new Plateau();
+                        plateau.RemplirTabLettresDepuisFichierLettre("Lettres.txt");
+                        plateau.ToFile("save.txt");
+                        plateau.ToRead("save.txt");
                         Jeu gameAléatoire = new Jeu(dico, plateau, joueurs);
                         gameAléatoire.Partie();
                         break;
